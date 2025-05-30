@@ -84,3 +84,10 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
    - As a tutor, I want to define available time slots and booking rules so that I can control my teaching schedule.
    - As a student, I want to see only valid booking slots so that I don’t accidentally book invalid dates.
    - As an admin, I want to manually create invitation tokens so that I can control who registers as a tutor.
+
+7. High-level architecture diagram  
+![image](https://github.com/user-attachments/assets/f26571b0-9d11-4d1f-8c2d-1383fab9b08c)
+
+8. ERD  
+![image](https://github.com/user-attachments/assets/db2c11e8-1e6f-4088-bd29-9c239dbc2b79)
+
