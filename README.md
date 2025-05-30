@@ -22,7 +22,7 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
    - Payment API: Stripe (Connect Standard)
    - Hosting: Vercel (Frontend), Render (Webhook API)
 
-5. Features to be Implemented:
+5. Features to be Implemented:  
    **Core Features**
 
    - Tutor registration via invitation token
@@ -44,41 +44,40 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
    - Contact form integration (Google Forms)
 
 5'. Features by Role  
-  Tutor Features:
-
-    - Sign up via invitation link (one-time token)
-    - Connect a Stripe Standard account for direct payments
-    - Create ticket plans (one-time or monthly)
-    - Set price, duration, recurrence (for monthly)
-    - Generate reusable purchase URLs for each plan
-    - Register available lesson slots (date + time range)
-    - Set minimum number of days before booking (advance notice rule)
-    - View and manage student reservations
-    - Cancel or reschedule if needed
+  Tutor Features:  
+    - Sign up via invitation link (one-time token)  
+    - Connect a Stripe Standard account for direct payments  
+    - Create ticket plans (one-time or monthly)  
+    - Set price, duration, recurrence (for monthly)  
+    - Generate reusable purchase URLs for each plan  
+    - Register available lesson slots (date + time range)  
+    - Set minimum number of days before booking (advance notice rule)  
+    - View and manage student reservations  
+    - Cancel or reschedule if needed  
     - Override expired monthly tickets when booking manually  
       
-    Student Features:  
-    - Sign up via plan-specific link from tutor
-    - Login via Supabase Auth
-    - Purchase tickets through Stripe Checkout (login required)
-    - View ticket history (active, used, expired)
-    - Browse available time slots from the tutor
-    - Only valid times are shown (based on ticket duration and notice rules)
-    - Book a lesson directly from available slots (no approval step)
+  Student Features:  
+    - Sign up via plan-specific link from tutor  
+    - Login via Supabase Auth  
+    - Purchase tickets through Stripe Checkout (login required)  
+    - View ticket history (active, used, expired)  
+    - Browse available time slots from the tutor  
+    - Only valid times are shown (based on ticket duration and notice rules)  
+    - Book a lesson directly from available slots (no approval step)  
     - See list of confirmed upcoming reservations  
+  
+  Shared Features (Common Modules):  
+    - Supabase Auth for login and role-based access control  
+    - Role-based dashboard layout (tutor vs student)  
+    - Token-based URL logic (for registration and ticket purchase)  
+    - Timezone-aware date handling (tutor’s timezone used for booking logic)  
+    - Automatic ticket issuance after payment (via Stripe webhook)  
+    - Booking immediately confirmed when student selects a time  
+    - Logout, profile update, and session management  
+    - Responsive layout with Tailwind CSS  
+    - Stripe Connect setup and payment tracking  
+    - (Optional) Contact form via Google Forms  
       
-    Shared Features (Common Modules):
-    - Supabase Auth for login and role-based access control
-    - Role-based dashboard layout (tutor vs student)
-    - Token-based URL logic (for registration and ticket purchase)
-    - Timezone-aware date handling (tutor’s timezone used for booking logic)
-    - Automatic ticket issuance after payment (via Stripe webhook)
-    - Booking immediately confirmed when student selects a time
-    - Logout, profile update, and session management
-    - Responsive layout with Tailwind CSS
-    - Stripe Connect setup and payment tracking
-    - (Optional) Contact form via Google Forms
-
 6. User Stories:
    - As a tutor, I want to create ticket plans so that I can offer flexible lesson options to students.
    - As a student, I want to purchase a ticket via a link so that I can quickly book lessons without account setup complexity.
