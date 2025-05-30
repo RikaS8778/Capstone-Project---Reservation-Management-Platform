@@ -2,13 +2,13 @@
 
 This app supports lesson reservation &amp; ticket management for tutors with small business.
 
-1. Project Title:
+1. Project Title:  
    TutorConnect – Ticket-Based Lesson Booking & Payment Platform
 
-2. Problem Statement:
+2. Problem Statement:  
    Independent tutors often rely on manual communication through email or chat apps to schedule lessons and accept payments. This process is time-consuming, error-prone, and lacks centralized management. There's a need for a simple platform that allows tutors to manage bookings and payments in one place, while giving students an easy way to purchase tickets and reserve sessions.
 
-3. Overview of the Application’s Functionality:
+3. Overview of the Application’s Functionality:  
    TutorConnect is a web-based platform that enables individual tutors to manage online or in-person lesson schedules and accept payments through a ticket-based system. Tutors can register available time slots and create one-time or monthly ticket plans. Each plan generates a unique URL that tutors share with students. Students can use this link to sign up, purchase a ticket, and immediately book a lesson. All reservations are automatically confirmed, and tutors can cancel or reschedule as needed. The platform includes a student dashboard to view tickets and reservations, and a tutor dashboard for managing availability, bookings, and ticket plans.
 
 4. Technology Stack:
@@ -43,8 +43,8 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
    - Past ticket history with filter
    - Contact form integration (Google Forms)
 
-5'. Features by Role
-Tutor Features:
+5'. Features by Role  
+  Tutor Features:
 
     - Sign up via invitation link (one-time token)
     - Connect a Stripe Standard account for direct payments
@@ -55,8 +55,9 @@ Tutor Features:
     - Set minimum number of days before booking (advance notice rule)
     - View and manage student reservations
     - Cancel or reschedule if needed
-    - Override expired monthly tickets when booking manually
-    Student Features:
+    - Override expired monthly tickets when booking manually  
+      
+    Student Features:  
     - Sign up via plan-specific link from tutor
     - Login via Supabase Auth
     - Purchase tickets through Stripe Checkout (login required)
@@ -64,7 +65,8 @@ Tutor Features:
     - Browse available time slots from the tutor
     - Only valid times are shown (based on ticket duration and notice rules)
     - Book a lesson directly from available slots (no approval step)
-    - See list of confirmed upcoming reservations
+    - See list of confirmed upcoming reservations  
+      
     Shared Features (Common Modules):
     - Supabase Auth for login and role-based access control
     - Role-based dashboard layout (tutor vs student)
