@@ -43,8 +43,10 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
    - Past ticket history with filter
    - Contact form integration (Google Forms)
 
-5'. Features by Role  
-  Tutor Features:  
+ 
+   **■Features by Role■**
+     
+     **Tutor Features:**  
     - Sign up via invitation link (one-time token)  
     - Connect a Stripe Standard account for direct payments  
     - Create ticket plans (one-time or monthly)  
@@ -56,7 +58,7 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
     - Cancel or reschedule if needed  
     - Override expired monthly tickets when booking manually  
       
-  Student Features:  
+    **Student Features:**  
     - Sign up via plan-specific link from tutor  
     - Login via Supabase Auth  
     - Purchase tickets through Stripe Checkout (login required)  
@@ -66,7 +68,7 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
     - Book a lesson directly from available slots (no approval step)  
     - See list of confirmed upcoming reservations  
   
-  Shared Features (Common Modules):  
+    **Shared Features (Common Modules):**  
     - Supabase Auth for login and role-based access control  
     - Role-based dashboard layout (tutor vs student)  
     - Token-based URL logic (for registration and ticket purchase)  
@@ -89,6 +91,7 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
 ![image](https://github.com/user-attachments/assets/f26571b0-9d11-4d1f-8c2d-1383fab9b08c)
 
 8. ERD  
-![image](https://github.com/user-attachments/assets/f4191baa-8284-4bd8-95c8-86894daac846)
+![image](https://github.com/user-attachments/assets/7073144c-362d-4e55-8d40-13f8f925e8ee)
+
 
 
