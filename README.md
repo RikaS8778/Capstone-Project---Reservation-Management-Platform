@@ -89,5 +89,6 @@ This app supports lesson reservation &amp; ticket management for tutors with sma
 ![image](https://github.com/user-attachments/assets/f26571b0-9d11-4d1f-8c2d-1383fab9b08c)
 
 8. ERD  
-![image](https://github.com/user-attachments/assets/db2c11e8-1e6f-4088-bd29-9c239dbc2b79)
+![image](https://github.com/user-attachments/assets/f4191baa-8284-4bd8-95c8-86894daac846)
+
 
