@@ -81,3 +81,13 @@ CREATE POLICY "Tutors can update their availability"
   ON availabilities
   FOR UPDATE USING(auth.uid() = tutor_id)
   WITH CHECK (auth.uid() = tutor_id);
+
+
+CREATE POLICY "Tutors can update their settings, but cannot change public_id"
+  ON tutor_settings
+  FOR UPDATE
+  USING (auth.uid() = tutor_id)
+  WITH CHECK (
+    auth.uid() = tutor_id
+    AND public_id = public_id  
+  );
