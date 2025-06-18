@@ -12,7 +12,9 @@ export default function GoogleOAuthCallback() {
 
     const checkSession = async () => {
       const { data, error } = await supabase.auth.getSession()
+      
       const session = data.session
+      console.log('access_token:', session?.access_token)
       const expectedEmail = sessionStorage.getItem('expectedEmail')
 
       if (error) {

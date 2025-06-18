@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     .from('tokens')
     .select('*')
     .eq('token', token)
-    .eq('used_at', null)
+    .is('used_at', null)
     .single()
 
     console.log('token:', token)
