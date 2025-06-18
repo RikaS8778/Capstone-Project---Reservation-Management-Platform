@@ -16,11 +16,17 @@ export default function TutorSignupPage() {
       setIsTokenValid(false)
       return
     }
-    fetch(`/api/auth/verify-token?token=${token}`)
-      .then((res) => {
-        setIsTokenValid(res.ok)}
-      )
-      .catch(() => setIsTokenValid(false))
+     const verify = async () => {
+      try {
+        const res = await fetch(`/api/auth/verify-token?token=${token}`)
+        setIsTokenValid(res.ok)
+      } catch (err) {
+        console.error('Token verification failed:', err)
+        setIsTokenValid(false)
+      }
+    }
+
+    verify()
   }, [token])
 
   if (isTokenValid === null) {
@@ -41,9 +47,9 @@ export default function TutorSignupPage() {
     console.log('res', res)
     if (res.ok) {
       // redirect or show success
-    //   router.push('/signup/complete') // redirect, replace with actual route
-      router.push('/signup/complete')// dummy
-      console.log('Signup successful!')
+      //   router.push('/signup/complete') // redirect, replace with actual route
+      router.push('/signup/complete') // dummy
+      // console.log('Signup successful!')
     } else {
       setError('Signup failed.')
     }

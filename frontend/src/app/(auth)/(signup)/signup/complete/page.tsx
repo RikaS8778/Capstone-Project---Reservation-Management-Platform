@@ -22,7 +22,9 @@ export default function SignupCompletePage() {
   useEffect(() => {
     fetch('/api/auth/me')
       .then(res => res.json())
-      .then(data => setUser(data))
+      .then(data => {
+        setUser(data)
+      })
       .catch(() => setError('failed to fetch user data'))
   }, [])
 
@@ -48,6 +50,9 @@ export default function SignupCompletePage() {
       last_name: formData.get('last_name'),
       time_zone: formData.get('time_zone'),
     }
+
+    
+
     if (user?.role === 1) {
       payload.tutor_setting = {
         // from TutorSettingsFields
@@ -70,7 +75,7 @@ export default function SignupCompletePage() {
     }
   }
 
-  if (!user) return <div>Loading...</div>
+  if (!user) return <div className='test-center'>Loading...</div>
   if (error) return <div className="text-red-500">{error}</div>
 
   return (
@@ -80,7 +85,7 @@ export default function SignupCompletePage() {
         <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
         <UserProfileFields />
         {user.role === 1 && <TutorSettingsFields />}
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mb-5">Submit</button>
         </form>
     </div>
   )

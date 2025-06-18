@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Not signed in' }, { status: 401 })
 
-  const { data: userInfo } = await supabase.from('users').select('*').eq('email', user.email).single()
+  const { data: userInfo } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle()
   let tutor_setting_exists = false
   if (userInfo?.role === 1) {
     const { data: ts } = await supabase.from('tutor_setting').select('id').eq('tutor_id', userInfo.id).maybeSingle()

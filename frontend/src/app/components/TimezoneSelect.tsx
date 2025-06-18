@@ -11,7 +11,7 @@ export default function TimezoneSelect({ value, onChange }: TimezoneSelectProps)
 
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium">Timezone</label>
+      <label htmlFor="currency" className="text-start block mb-1 font-medium">Timezone</label>
       <select
         value={timezone}
         onChange={(e) => {

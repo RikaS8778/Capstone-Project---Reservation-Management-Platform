@@ -26,7 +26,7 @@ export default function TutorOAuthCallback() {
 
       if(token) {
         // users insert & tokens update 
-        const res = await fetch('/api/auth/signup/tutor/oauth', { //not have file yet, how to make function
+        const res = await fetch('/api/auth/signup/tutor/oauth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -45,7 +45,7 @@ export default function TutorOAuthCallback() {
             router.push(`/totor/signup?token=${token}&error=Signup+failed.+Please+try+again.`)
         }
       } else if (publicId){
-        const res = await fetch('/api/auth/signup/student/oauth', {
+        const res = await fetch('/api/auth/signup/student/oauth', { //have to make this endpoint
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

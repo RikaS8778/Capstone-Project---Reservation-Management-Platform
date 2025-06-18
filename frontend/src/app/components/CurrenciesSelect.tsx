@@ -12,7 +12,7 @@ export default function CurrenciesSelects({ value, onChange }: CurrenciesSelectP
 
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium">currency</label>
+      <label htmlFor="currency" className="text-start block mb-1 font-medium">Currency</label>
       <select
         value={currency}
         onChange={(e) => {

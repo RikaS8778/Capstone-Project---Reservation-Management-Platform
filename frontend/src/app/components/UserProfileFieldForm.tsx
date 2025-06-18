@@ -19,22 +19,29 @@ export default function UserProfileFields({ values }: UserProfileFieldsProps) {
   return (
     
     <>
-      <input
-        name="firstName"
-        placeholder="First Name"
-        value={firstName}
-        onChange={e => setFirstName(e.target.value)}
-        required
-        className="mb-2 p-2 border rounded w-full"
-      />
-      <input
-        name="lastName"
-        placeholder="Last Name"
-        value={lastName}
-        onChange={e => setLastName(e.target.value)}
-        required
-        className="mb-2 p-2 border rounded w-full"
-      />
+      <div className="mb-4">
+        <label htmlFor="currency" className="text-start block mb-1 font-medium">First Name</label>
+        <input
+          name="firstName"
+          placeholder="First Name"
+          value={firstName}
+          onChange={e => setFirstName(e.target.value)}
+          required
+          className="mb-2 p-2 border rounded w-full"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="currency" className="text-start block mb-1 font-medium">Last Name</label>
+        <input
+          name="lastName"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={e => setLastName(e.target.value)}
+          required
+          className="mb-2 p-2 border rounded w-full"
+        />
+      </div>
+      
       <TimezoneSelect value={timezone} onChange={(tz) => setTimeZone(tz)} />
     </>
   )

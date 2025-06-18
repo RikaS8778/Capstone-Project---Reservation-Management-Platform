@@ -1,9 +1,9 @@
 'use client'
 
-import { useActionState } from 'react'
+import { startTransition, useActionState } from 'react'
 import { login } from './actions'
-import GoogleLoginButton from '../components/GoogleLoginButton'
-import AuthForm from '../components/AuthForm'
+import GoogleLoginButton from '../../components/GoogleLoginButton'
+import AuthForm from '../../components/AuthForm'
 import { useEffect, useState } from 'react'
 
 type LoginState = {
@@ -37,7 +37,7 @@ export default function LoginPage() {
         const formData = new FormData()
         formData.append('email', email)
         formData.append('password', password)
-        formAction(formData)
+        startTransition(() => formAction(formData))
       }}
       error={state.error ?? oauthError ?? undefined}
       GoogleButton={<GoogleLoginButton />}

@@ -12,6 +12,10 @@ export async function GET(req: Request) {
     .eq('used_at', null)
     .single()
 
+    console.log('token:', token)
+    console.log('data:', data)
+    console.log('error:', error)
+
   if (error || !data) {
     return new Response('Invalid token', { status: 400 })
   }

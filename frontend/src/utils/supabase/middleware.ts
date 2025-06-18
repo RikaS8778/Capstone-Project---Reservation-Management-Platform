@@ -44,7 +44,7 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/[public_id]/signup') &&
     !request.nextUrl.pathname.startsWith('/auth') && 
     !request.nextUrl.pathname.startsWith('/api/auth/signup/tutor') &&
-    !request.nextUrl.pathname.startsWith('/api/verify-token') &&
+    !request.nextUrl.pathname.startsWith('/api/auth/verify-token') &&
     !request.nextUrl.pathname.startsWith('/signup/oauth-callback') 
   ) {
     // no user, potentially respond by redirecting the user to the login page
