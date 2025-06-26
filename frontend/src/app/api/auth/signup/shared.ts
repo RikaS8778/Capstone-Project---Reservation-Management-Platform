@@ -37,3 +37,33 @@ export async function updateToken(supabase: SupabaseClient, {token, email} : {to
   }
   return true;
 }
+
+
+// User--update for complete signup
+export async function updateUserProfile(supabase: SupabaseClient, {
+  id, first_name, last_name, time_zone
+}: {
+  id: string, first_name: string, last_name: string, time_zone: string
+}) {
+  const { error } = await supabase
+    .from('users')
+    .update({ first_name, last_name, time_zone, updated_at: new Date() })
+    .eq('id', id)
+
+  if (error) throw new Error(`User update error: ${error.message}`)
+}
+
+
+// tutor_settings - insert for complete signup
+export async function insertTutorSetting(supabase: SupabaseClient, {
+  tutor_id, public_id, booking_deadline, booking_unit, currency, message, picture_path
+}: {
+  tutor_id: string, public_id: string, booking_deadline: number, booking_unit: number,
+  currency: string, message: string, picture_path?: string
+}) {
+  const { error } = await supabase.from('tutor_settings').insert({
+    tutor_id, public_id, booking_deadline, booking_unit, currency, message,
+    picture_path, created_at: new Date(), updated_at: new Date()
+  })
+  if (error) throw new Error(`tutor_settings insert error: ${error.message}`)
+}

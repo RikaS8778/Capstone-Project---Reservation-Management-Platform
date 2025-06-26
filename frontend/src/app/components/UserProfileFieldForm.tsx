@@ -1,48 +1,69 @@
-import React, { useState } from 'react'
+'use client'
+
+import { useFormContext } from 'react-hook-form'
 import TimezoneSelect from './TimezoneSelect'
 
-export type UserProfileFieldsProps = {
-  values?: {
-    firstName: string
-    lastName: string
-    timeZone: string
-  }
-}
+export default function UserProfileFieldForm() {
+  const {
+    register,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useFormContext()
 
-export default function UserProfileFields({ values }: UserProfileFieldsProps) {
-  const values_ = values ?? { firstName: '', lastName: '', timeZone: '' }
-  const [firstName, setFirstName] = useState(values_.firstName)
-  const [lastName, setLastName] = useState(values_.lastName)
-  const [timezone, setTimeZone] = useState(
-      values_.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone
-    )
+  const timezone = watch('timezone')
+
   return (
-    
     <>
       <div className="mb-4">
-        <label htmlFor="currency" className="text-start block mb-1 font-medium">First Name</label>
+        <label htmlFor="first_name" className="block font-medium text-start mb-1">
+          First Name
+        </label>
         <input
-          name="firstName"
-          placeholder="First Name"
-          value={firstName}
-          onChange={e => setFirstName(e.target.value)}
-          required
-          className="mb-2 p-2 border rounded w-full"
+          id="first_name"
+          {...register('first_name', {
+            required: 'First name is required',
+            pattern: {
+              value: /^[A-Za-z]+$/,
+              message: 'Only alphabet characters are allowed',
+            },
+          })}
+          className="p-2 border rounded w-full"
         />
+        {errors.first_name && (
+          <p className="text-red-600 text-sm mt-1">{errors.first_name.message as string}</p>
+        )}
       </div>
+
       <div className="mb-4">
-        <label htmlFor="currency" className="text-start block mb-1 font-medium">Last Name</label>
+        <label htmlFor="last_name" className="block font-medium text-start mb-1">
+          Last Name
+        </label>
         <input
-          name="lastName"
-          placeholder="Last Name"
-          value={lastName}
-          onChange={e => setLastName(e.target.value)}
-          required
-          className="mb-2 p-2 border rounded w-full"
+          id="last_name"
+          {...register('last_name', {
+            required: 'Last name is required',
+            pattern: {
+              value: /^[A-Za-z]+$/,
+              message: 'Only alphabet characters are allowed',
+            },
+          })}
+          className="p-2 border rounded w-full"
         />
+        {errors.last_name && (
+          <p className="text-red-600 text-sm mt-1">{errors.last_name.message as string}</p>
+        )}
       </div>
-      
-      <TimezoneSelect value={timezone} onChange={(tz) => setTimeZone(tz)} />
+
+      <div className="mb-4">
+        <TimezoneSelect
+          value={timezone}
+          onChange={(tz) => setValue('timezone', tz)}
+        />
+        {errors.timezone && (
+          <p className="text-red-600 text-sm mt-1">{errors.timezone.message as string}</p>
+        )}
+      </div>
     </>
   )
 }

@@ -1,92 +1,102 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-
+import TutorSettingFieldsForm from '@/app/components/TutorSettingFieldsForm'
+import UserProfileFieldForm from '@/app/components/UserProfileFieldForm'
+import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import UserProfileFields from '@/app/components/UserProfileFieldForm'
-import TutorSettingsFields from '@/app/components/TutorSettingFieldsForm'
+import { useState } from 'react'
 
-interface User {
-  role: number;
-  first_name?: string;
-  last_name?: string;
-  time_zone?: string;
-  // Add other user fields as needed
+
+type FormValues = {
+  first_name: string
+  last_name: string
+  timezone: string
+  publicId: string
+  bookingDeadline: number
+  bookingUnit: number
+  currency: string
+  discription: string
+  file?: File | null;
 }
 
-export default function SignupCompletePage() {
-  const [user, setUser] = useState<User | null>(null)
-  const [error, setError] = useState<string>()
+export default function CompleteSignupPage() {
+  const methods = useForm<FormValues>({
+    defaultValues: {
+      first_name: '',
+      last_name: '',
+      timezone: 'America/Vancouver',
+      publicId: '',
+      bookingDeadline: 1,
+      bookingUnit: 15,
+      currency: 'CAD',
+      discription: '',
+    },
+  })
   const router = useRouter()
+  const { handleSubmit, setError } = methods
+  const [loading, setLoading] = useState(false)
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        setUser(data)
-      })
-      .catch(() => setError('failed to fetch user data'))
-  }, [])
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    //!!have to update - it's jusa a example
-    interface TutorSettingPayload {
-      subject: FormDataEntryValue | null;
-      experience: FormDataEntryValue | null;
-      // ...etc
-    }
-
-    interface Payload {
-      first_name: FormDataEntryValue | null;
-      last_name: FormDataEntryValue | null;
-      time_zone: FormDataEntryValue | null;
-      tutor_setting?: TutorSettingPayload;
-    }
-
-    const payload: Payload = {
-      first_name: formData.get('first_name'),
-      last_name: formData.get('last_name'),
-      time_zone: formData.get('time_zone'),
-    }
-
-    
-
-    if (user?.role === 1) {
-      payload.tutor_setting = {
-        // from TutorSettingsFields
-        //!!have to update - it's jusa a example!!
-        subject: formData.get('subject'),
-        experience: formData.get('experience'),
-        // ...etc
+  const onSubmit = async (data: FormValues) => {
+    setLoading(true)
+    setServerError(null)
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'file') {
+        if (value instanceof File && value.size > 0) {
+          formData.append('file', value);
+        }
+      } else if (value !== undefined) {
+        formData.append(key, String(value));
       }
-    }
-    const res = await fetch('/api/auth/me', {
+    });
+
+    const res = await fetch('/api/auth/signup/complete', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-    if (res.ok) {
-    //router.push('/dashboard') 
-      router.push('/') // dummy redirect, replace with actual route
-    } else {
-      setError('Failed to update profile. Please try again.')
+      body: formData,
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setServerError(result.error || 'Something went wrong. Please try again.');
+      setLoading(false);
+      return;
     }
+
+    // if success, redirect to dashboard
+    router.push('/dashboard');
   }
 
-  if (!user) return <div className='test-center'>Loading...</div>
-  if (error) return <div className="text-red-500">{error}</div>
-
   return (
-    <div className="text-center mt-4">
-        <h1 className="text-2xl mb-4">Complete Your Signup</h1>
-        <p className="mb-6">Please fill out your profile information below.</p>
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
-        <UserProfileFields />
-        {user.role === 1 && <TutorSettingsFields />}
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mb-5">Submit</button>
+    <div className="max-w-lg mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-4 text-center">Complete Your Signup</h1>
+      <p className="mb-6 text-center text-gray-600">
+        Please fill out your profile information below.
+      </p>
+
+      {serverError && (
+        <div className="m-4 text-red-600 font-semibold text-center">
+          {serverError}
+        </div>
+      )}
+
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <UserProfileFieldForm />
+          <TutorSettingFieldsForm />
+
+          <div className="flex justify-center mt-8">
+            <button
+              type="submit"
+              disabled={loading}
+              className="block w-2/6 mx-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition"
+            >
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+          </div>
         </form>
+      </FormProvider>
     </div>
   )
 }

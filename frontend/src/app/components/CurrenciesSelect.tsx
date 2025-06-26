@@ -11,7 +11,7 @@ export default function CurrenciesSelects({ value, onChange }: CurrenciesSelectP
   const [currency, setCurrency] = useState(value)
 
   return (
-    <div>
+    <div className='mb-4'>
       <label htmlFor="currency" className="text-start block mb-1 font-medium">Currency</label>
       <select
         value={currency}

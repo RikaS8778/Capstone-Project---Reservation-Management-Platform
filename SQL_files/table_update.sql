@@ -22,3 +22,14 @@ ALTER COLUMN first_name DROP NOT NULL,
 ALTER COLUMN last_name DROP NOT NULL,
 ALTER COLUMN time_zone DROP NOT NULL,
 ALTER COLUMN time_zone DROP DEFAULT;
+
+
+
+-- Have to update create tabeles with the following changes: starting from here
+ALTER TABLE tutor_settings ADD COLUMN message text;
+COMMENT ON COLUMN tutor_settings.message IS 'A short self-intro or instructions from tutor';
+
+ALTER TABLE ticket_types ADD COLUMN name text;
+COMMENT ON COLUMN ticket_types.name IS 'Optional name for tutor to identify the ticket plan';
+-- Have to update create tabeles with the following changes: end  
+
