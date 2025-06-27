@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation' 
 import { useEffect, useState } from 'react'
+import Spinner from '@/app/components/Spinner'
 
 // Define the User type according to your API response structure
 interface User {
@@ -47,7 +48,7 @@ export default function DashboardPage() {
 
 
     if (isChecking || !user) {
-      return <div className="text-center mt-4">Loading user data...</div>
+      return <Spinner message={'Loading user data...'}/>
     }
 
   return (

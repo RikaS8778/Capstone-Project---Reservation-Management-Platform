@@ -33,3 +33,7 @@ ALTER TABLE ticket_types ADD COLUMN name text;
 COMMENT ON COLUMN ticket_types.name IS 'Optional name for tutor to identify the ticket plan';
 -- Have to update create tabeles with the following changes: end  
 
+
+ALTER TABLE tutor_settings
+ADD COLUMN stripe_onboarding_completed boolean DEFAULT false,
+ADD COLUMN stripe_verified_at timestamptz;

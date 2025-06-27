@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
+import Spinner from '@/app/components/Spinner'
 
 export default function GoogleOAuthCallback() {
   const router = useRouter()
@@ -36,15 +37,30 @@ export default function GoogleOAuthCallback() {
       }
 
       sessionStorage.removeItem('expectedEmail')
-      router.push('dashboard') // dummy redirect, replace with actual dashboard route
+      
+      const { data: userInfo } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', session.user.id)
+        .maybeSingle()
+    
+      if (!userInfo) {
+        router.push('/login?error=UserInfoNotFound')
+        return 
+      }
+    
+      if (userInfo.role === 1) {
+        router.push('/tutor/dashboard')
+      } else if (userInfo.role === 2) {
+        router.push('/student/dashboard')
+      } 
+    
     }
 
     checkSession()
   }, [router])
 
   return (
-    <div className="text-center mt-4 text-sm text-gray-500">
-      <p>Verifying your login...</p>
-    </div>
+    <Spinner message={'Verifying your login...'} />
   )
 }

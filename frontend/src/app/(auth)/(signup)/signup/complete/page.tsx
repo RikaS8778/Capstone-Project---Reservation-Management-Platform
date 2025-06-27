@@ -4,7 +4,8 @@ import TutorSettingFieldsForm from '@/app/components/TutorSettingFieldsForm'
 import UserProfileFieldForm from '@/app/components/UserProfileFieldForm'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Spinner from '@/app/components/Spinner'
 
 
 type FormValues = {
@@ -36,6 +37,22 @@ export default function CompleteSignupPage() {
   const { handleSubmit, setError } = methods
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  // const [error, setError] = useState<string>()
+
+  useEffect(() => {
+      fetch('/api/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          setUser(data)
+        })
+        .catch(() => setServerError('failed to fetch user data'))
+    }, [])
+
+  if (!user) return (
+    <Spinner message={'Loading...'} />
+  )
+    
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true)
@@ -64,9 +81,17 @@ export default function CompleteSignupPage() {
       return;
     }
 
-    // if success, redirect to dashboard
-    router.push('/dashboard');
+    // if success, redirect to dashboard 
+    // TODO: if users.role==1 redirect to tutor dashboard, else if users.role==2 then student dashboard
+    if(user.role === 1) {
+      router.push('/tutor/dashboard');
+    } else if (user.role === 2) {
+      router.push('/student/dashboard');
+    }
+    
   }
+
+  
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
@@ -83,8 +108,11 @@ export default function CompleteSignupPage() {
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          
           <UserProfileFieldForm />
-          <TutorSettingFieldsForm />
+          {/* TODO: if users.role==2, TutorSettingFieldsForm should be invisible. */}
+          {user.role === 1 && <TutorSettingFieldsForm />}
+          {/* <TutorSettingFieldsForm /> */}
 
           <div className="flex justify-center mt-8">
             <button
