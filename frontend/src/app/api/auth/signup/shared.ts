@@ -17,9 +17,28 @@ export async function createUserForAuth(supabase: SupabaseClient, { email, passw
   return authData.user;
 }
 
-export async function insertUser(supabase: SupabaseClient, { id, email, role }: { id: string, email: string, role: number }) {
+export async function insertUser(supabase: SupabaseClient, { id, email, role, public_id }: { id: string, email: string, role: number, public_id?: string }) {
+
+  let tutor_id: string | null = null
+
+  //get tutor_id from public_id for student signup
+  if(public_id) {
+    const { data, error } = await supabase
+      .from('tutor_settings')
+      .select('tutor_id')
+      .eq('public_id', public_id)
+      .is('deleted_at', null)
+      .single()
+
+      if (error || !data) {
+        return new Response('User insert error', { status: 400 })
+      }
+
+      tutor_id = data.tutor_id;
+  }
+
   // Create a new user in public 'users' table
-  const { error: userError } = await supabase.from('users').insert({ id, email, role })
+  const { error: userError } = await supabase.from('users').insert({ id, email, role, tutor_id })
 
   if (userError) {
     console.error('User insert error:', userError)
@@ -67,3 +86,4 @@ export async function insertTutorSetting(supabase: SupabaseClient, {
   })
   if (error) throw new Error(`tutor_settings insert error: ${error.message}`)
 }
+

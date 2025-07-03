@@ -41,11 +41,13 @@ export async function updateSession(request: NextRequest) {
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/tutor/signup') &&
-    !request.nextUrl.pathname.startsWith('/[public_id]/signup') &&
+    !request.nextUrl.pathname.startsWith('/student/signup') &&
     !request.nextUrl.pathname.startsWith('/auth') && 
     !request.nextUrl.pathname.startsWith('/api/auth/signup/tutor') &&
     !request.nextUrl.pathname.startsWith('/api/auth/verify-token') &&
-    !request.nextUrl.pathname.startsWith('/signup/oauth-callback') 
+    !request.nextUrl.pathname.startsWith('/signup/oauth-callback') &&
+    !request.nextUrl.pathname.startsWith('/api/auth/check-public-id') &&
+    !request.nextUrl.pathname.startsWith('/api/auth/signup/student') 
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
