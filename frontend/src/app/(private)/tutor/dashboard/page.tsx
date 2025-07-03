@@ -1,13 +1,12 @@
 
 import { redirect } from 'next/navigation'
-
-import { getThisMonthRevenue, getTotalStudents, getUpcomingLessons } from '@/utils/data'
-import { getUserInfo } from './data'
+import { getThisMonthRevenue, getTotalStudents, getUpcomingLessons } from '@/utils/data/tutor/data'
 import StripeConnectBanner from '@/app/components/dashboard/tutor/StripeConnectBanner'
 import TotalStudentsCard from '@/app/components/dashboard/tutor/TotalStudentsCard'
 import ThisMonthRevenueCard from '@/app/components/dashboard/tutor/ThisMonthRevenueCard'
 import UpcomingLessonsCard from '@/app/components/dashboard/tutor/UpcomingLessonsCard'
 import QuickActionsCard from '@/app/components/dashboard/tutor/QuickActionsCard'
+import { getUserInfo } from '@/utils/data/data'
 
 export default async function DashboardPage() {
   // Auth & profile check

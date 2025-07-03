@@ -1,4 +1,4 @@
-import { getUpcomingLessons } from '@/utils/data'
+import { getUpcomingLessons } from '@/utils/data/tutor/data'
 
 export default async function UpcomingLessonsCard({ tutorId }: { tutorId: string }) {
   // Fetch upcoming lessons from the DB

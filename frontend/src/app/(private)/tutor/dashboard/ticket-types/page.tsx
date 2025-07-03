@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { getTicketTypes } from '@/utils/data'
+import { getTicketTypes } from '@/utils/data/tutor/data'
 import TicketTypesTable from './data-tables'
 
 

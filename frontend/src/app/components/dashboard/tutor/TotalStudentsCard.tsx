@@ -1,6 +1,6 @@
 // app/components/tutor/dashboard/TotalStudentsCard.tsx
 
-import { getTotalStudents } from "@/utils/data"
+import { getTotalStudents } from "@/utils/data/tutor/data"
 
 export default async function TotalStudentsCard({ tutorId }: { tutorId: string }) {
   // Fetch total number of students for this tutor

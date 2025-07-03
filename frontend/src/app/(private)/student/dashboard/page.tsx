@@ -1,61 +1,45 @@
-'use client'
-
-import { useRouter } from 'next/navigation' 
-import { useEffect, useState } from 'react'
-import Spinner from '@/app/components/Spinner'
-
-// Define the User type according to your API response structure
-interface User {
-  first_name?: string;
-  last_name?: string;
-  // Add other fields as needed
-}
-
-export default function DashboardPage() {
-
-    const [user, setUser] = useState<User | null>(null)
-    // const [error, setError] = useState<string>() //if I don't use erro, remove it later
-    const [isChecking, setIsChecking] = useState(true)
-    const router = useRouter()
-    
-    useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/auth/me')
-        const data = await res.json()
-        setUser(data)
-
-        if (!data.first_name || !data.last_name) {
-          router.push('/signup/complete')
-        } else {
-          setIsChecking(false) 
-        }
-      } catch (err: unknown) {
-        // setError('Failed to fetch user data')
-        if (err instanceof Error) {
-          console.error('EFailed to fetch user data:', err.message)
-        } else {
-          console.error('EFailed to fetch user data:', err)
-        }
-        router.push('/login?error=fetchUserFailed') 
-        return
-        
-      }
-    }
-
-      fetchUser()
-    }, [router])
+import { redirect } from 'next/navigation'
+import { getUserInfo } from '@/utils/data/data'
+import TutorInfoCard from '@/app/components/dashboard/student/TutorInfoCard'
+import { getStudentDashboardData } from '@/utils/data/student/data'
+import StudentTicketsCard from '@/app/components/dashboard/student/StudentTicketsCard'
+import UpcomingLessonsCard from '@/app/components/dashboard/student/UpcomingLessonsCard'
 
 
-    if (isChecking || !user) {
-      return <Spinner message={'Loading user data...'}/>
-    }
+export default async function StudentDashboardPage() {
+  const { user, userInfo, error } = await getUserInfo()
+
+  if (!userInfo || error) {
+    redirect('/login?error=unauthorized')
+  }
+
+  if (!userInfo.first_name || !userInfo.last_name) {
+    redirect('/signup/complete')
+  }
+
+  const data = await getStudentDashboardData()
+
+  if (!data) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        Failed to load tutor info.
+      </div>
+    )
+  }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p className="text-gray-700">This is the dashboard page.</p>
-      {/* Add your dashboard components here */}
+    <div className="p-4 space-y-4">
+      <TutorInfoCard
+        tutorName={data.tutorName}
+        tutorMessage={data.tutorMessage}
+        tutorPictureUrl={data.tutorPictureUrl}
+      />
+      {/* <div className="p-4 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+        <StudentTicketsCard studentId={user.id} />
+        <UpcomingLessonsCard studentId={user.id} />
+      </div> */}
+      <StudentTicketsCard studentId={user.id} />
+      <UpcomingLessonsCard studentId={user.id} />
     </div>
   )
 }

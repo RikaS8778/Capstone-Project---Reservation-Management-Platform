@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { createAdminClient } from "@/utils/supabase/admin"
 
 export async function getUserInfo() {
   const supabase = await createClient();

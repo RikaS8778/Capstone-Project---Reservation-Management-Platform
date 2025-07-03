@@ -1,4 +1,4 @@
-import { getThisMonthRevenue } from '@/utils/data'
+import { getThisMonthRevenue } from '@/utils/data/tutor/data'
 
 export default async function ThisMonthRevenueCard({ tutorId }: { tutorId: string }) {
   const { total, currency } = await getThisMonthRevenue(tutorId)
