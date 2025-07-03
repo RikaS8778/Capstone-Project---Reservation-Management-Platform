@@ -35,7 +35,8 @@ export async function getUpcomingLessons(tutorId: string): Promise<LessonWithStu
     .single()
 
   if (userError || !user) {
-    console.error('Failed to fetch time zone:', userError?.message)
+    //TODO: have to change error after changing SQL
+    console.log('Failed to fetch time zone:', userError?.message)
     return []
   }
 
@@ -53,7 +54,8 @@ export async function getUpcomingLessons(tutorId: string): Promise<LessonWithStu
     }
 
   if (error || !data) {
-    console.error('Failed to fetch upcoming lessons:', error?.message)
+    //TODO: have to change error after changing SQL
+    console.log('Failed to fetch upcoming lessons:', error?.message)
     return []
   }
 
@@ -91,7 +93,8 @@ export async function getThisMonthRevenue(tutorId: string) {
     .maybeSingle()
 
   if (userError || !user?.time_zone) {
-    console.error('Failed to retrieve user time zone:', userError?.message)
+    //TODO: have to change error after changing SQL
+    console.log('Failed to retrieve user time zone:', userError?.message) 
     return { total: 0, currency: 'CAD' }
   }
 
@@ -116,21 +119,46 @@ export async function getThisMonthRevenue(tutorId: string) {
   .gte('created_at', startOfMonth)
   .lte('created_at', endOfMonth)) as unknown as { data: PaymentData, error: any }
 
-if (error) {
-  console.error('Failed to fetch revenue:', error)
-  return { total: 0, currency: 'USD' }
+  if (error) {
+    //TODO: have to change error after changing SQL
+    console.log('Failed to fetch revenue:', error)
+    return { total: 0, currency: 'CAD' }
+  }
+
+  const tutorPayments = data.filter(
+    (p) => p.ticket_type?.tutor_id === tutorId
+  )
+
+  const total = tutorPayments.reduce((sum, p) => sum + (p.amount || 0), 0)
+
+  const currency =
+    tutorPayments[0]?.ticket_type?.tutor_settings?.currency || 'CAD'
+
+  const stripe_account_id = tutorPayments[0]?.ticket_type?.tutor_settings?.stripe_account_id || null
+
+  return { total, currency,  stripe_account_id}
 }
 
-const tutorPayments = data.filter(
-  (p) => p.ticket_type?.tutor_id === tutorId
-)
+export async function getTicketTypes() {
+  const supabase = await createClient()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  if (userError || !userData?.user?.id) {
+    console.error('Failed to get authenticated user:', userError?.message)
+    return []
+  }
+  const userId = userData.user.id
 
-const total = tutorPayments.reduce((sum, p) => sum + (p.amount || 0), 0)
+  const { data, error } = await supabase
+    .from('ticket_types')
+    .select('id, name, price, visibility, created_at, type, quantities, lesson_duration')
+    .eq('tutor_id', userId)
+    .eq('is_deleted', false) 
+    .order('created_at', { ascending: false })
 
-const currency =
-  tutorPayments[0]?.ticket_type?.tutor_settings?.currency || 'CAD'
+  if (error) {
+    console.error('Failed to fetch ticket types:', error)
+    return []
+  }
 
-const stripe_account_id = tutorPayments[0]?.ticket_type?.tutor_settings?.stripe_account_id || null
-
-return { total, currency,  stripe_account_id}
+  return data
 }

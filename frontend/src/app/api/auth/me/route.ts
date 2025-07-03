@@ -12,9 +12,11 @@ export async function GET(req: NextRequest) {
 
   const { data: userInfo } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle()
   let tutor_setting_exists = false
+  let ts: { id: number; currency: string } | null = null
   if (userInfo?.role === 1) {
-    const { data: ts } = await supabase.from('tutor_setting').select('id').eq('tutor_id', userInfo.id).maybeSingle()
+    const { data } = await supabase.from('tutor_setting').select('id, currency').eq('tutor_id', userInfo.id).maybeSingle()
+    ts = data
     tutor_setting_exists = !!ts
   }
-  return NextResponse.json({ ...userInfo, tutor_setting_exists })
+  return NextResponse.json({ ...userInfo, tutor_setting_exists, currency: ts?.currency ?? 'CAD' })
 }

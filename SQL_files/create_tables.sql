@@ -36,7 +36,10 @@ CREATE TABLE tutor_settings (
   booking_deadline integer NOT NULL,
   booking_unit integer NOT NULL DEFAULT 30,
   currency VARCHAR(3) NOT NULL,
+  message text NOT NULL,
   stripe_account_id text,
+  stripe_onboarding_completed boolean DEFAULT false,
+  stripe_verified_at timestamptz,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
   deleted_at timestamptz,
@@ -58,6 +61,7 @@ CREATE TABLE availabilities (
 CREATE TABLE ticket_types (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tutor_id uuid NOT NULL REFERENCES users(id),
+  name text NOT NULL,
   type integer NOT NULL,
   quantities integer NOT NULL DEFAULT 1,
   price money NOT NULL,
@@ -70,6 +74,7 @@ CREATE TABLE ticket_types (
 );
 COMMENT ON COLUMN ticket_types.type IS '1: one-time, 2: monthly';
 COMMENT ON COLUMN ticket_types.visibility IS '1: public, 2: private';
+COMMENT ON COLUMN ticket_types.name IS 'For tutor to identify the ticket plan';
 
 CREATE TABLE payments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
