@@ -21,6 +21,7 @@ export default async function DashboardPage() {
   }
 
   const tutorId = user.id
+  const publicId = userInfo.tutor_settings[0]?.public_id
 
   const revenueData = await getThisMonthRevenue(tutorId)
 
@@ -36,7 +37,7 @@ export default async function DashboardPage() {
         <TotalStudentsCard tutorId={tutorId} />
         <ThisMonthRevenueCard tutorId={tutorId} />
         <UpcomingLessonsCard tutorId={tutorId} />
-        <QuickActionsCard publicId={tutorId} />
+        <QuickActionsCard publicId={publicId} />
       </div>
 
       <div className="text-sm text-gray-500 text-center">

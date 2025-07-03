@@ -209,3 +209,112 @@ export async function getUpcomingStudentLessons(studentId: string): Promise<Stud
 
   return converted
 }
+
+
+
+// for student dashboard>ticket purchase card
+export type PurchasableTicketType = {
+  id: string
+  name: string
+  type: 'monthly' | 'onetime'
+  lesson_duration: number
+  lesson_quantity: number
+  price: number
+  currency: string
+}
+
+type TicketTypeRow = {
+  id: string
+  name: string
+  type: number
+  lesson_duration: number
+  quantities: number
+  price: number
+}
+
+export async function getPurchasableTicketTypes(studentId: string): Promise<PurchasableTicketType[]> {
+  const supabase = await createClient()
+
+  // Step 0: Get tutor_id from users table
+  const { data: user, error: userError } = await supabase
+    .from('users')
+    .select('tutor_id')
+    .eq('id', studentId)
+    .single()
+
+  if (userError || !user?.tutor_id) {
+    console.error('Failed to fetch tutor_id:', userError?.message)
+    return []
+  }
+
+  // Step 0.1: Get currency from tutor_settings
+  const { data: setting, error: settingError } = await supabase
+    .from('tutor_settings')
+    .select('currency')
+    .eq('tutor_id', user.tutor_id)
+    .single()
+
+  if (settingError || !setting?.currency) {
+    console.error('Failed to fetch tutor_settings:', settingError?.message)
+    return []
+  }
+
+  const tutorCurrency = setting.currency
+
+  // Step 1: Get public tickets (visibility = 1)
+  const { data: publicTickets, error: publicError } = await supabase
+    .from('ticket_types')
+    .select('id, name, type, lesson_duration, quantities, price')
+    .eq('tutor_id', user.tutor_id)
+    .eq('is_deleted', false)
+    .eq('visibility', 1)
+
+  if (publicError) {
+    console.error('Failed to fetch public tickets:', publicError.message)
+    return []
+  }
+
+  // Step 2: Get allowed ticket IDs from intermediate table (visibility = 2)
+  const { data: allowedIds, error: idError } = await supabase
+    .from('ticket_type_visible_students')
+    .select('ticket_type_id')
+    .eq('student_id', studentId)
+
+  if (idError) {
+    console.error('Failed to fetch visible ticket ids:', idError.message)
+    return []
+  }
+
+  const visibleIds = allowedIds?.map(item => item.ticket_type_id) || []
+
+  // Step 3: Get private tickets if any
+  let privateTickets: TicketTypeRow[] = []
+
+  if (visibleIds.length > 0) {
+    const { data: privateData, error: privateError } = await supabase
+      .from('ticket_types')
+      .select('id, name, type, lesson_duration, quantities, price')
+      .eq('tutor_id', user.tutor_id)
+      .eq('is_deleted', false)
+      .eq('visibility', 2)
+      .in('id', visibleIds)
+
+    if (privateError) {
+      console.error('Failed to fetch private tickets:', privateError.message)
+    } else {
+      privateTickets = privateData || []
+    }
+  }
+
+  const allTickets: TicketTypeRow[] = [...(publicTickets || []), ...privateTickets]
+
+  return allTickets.map((ticket): PurchasableTicketType => ({
+    id: ticket.id,
+    name: ticket.name,
+    type: ticket.type === 1 ? 'onetime' : 'monthly',
+    lesson_duration: ticket.lesson_duration,
+    lesson_quantity: ticket.quantities,
+    price: ticket.price,
+    currency: tutorCurrency,
+  }))
+}

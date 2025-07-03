@@ -4,6 +4,7 @@ import TutorInfoCard from '@/app/components/dashboard/student/TutorInfoCard'
 import { getStudentDashboardData } from '@/utils/data/student/data'
 import StudentTicketsCard from '@/app/components/dashboard/student/StudentTicketsCard'
 import UpcomingLessonsCard from '@/app/components/dashboard/student/UpcomingLessonsCard'
+import PurchasableTicketsCard from '@/app/components/dashboard/student/PurchasableTicketsCard'
 
 
 export default async function StudentDashboardPage() {
@@ -34,12 +35,14 @@ export default async function StudentDashboardPage() {
         tutorMessage={data.tutorMessage}
         tutorPictureUrl={data.tutorPictureUrl}
       />
-      {/* <div className="p-4 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <StudentTicketsCard studentId={user.id} />
         <UpcomingLessonsCard studentId={user.id} />
-      </div> */}
-      <StudentTicketsCard studentId={user.id} />
-      <UpcomingLessonsCard studentId={user.id} />
+        <div className="md:col-span-2 ">
+          <PurchasableTicketsCard studentId={user.id} />
+        </div>
+      </div>
+
     </div>
   )
 }

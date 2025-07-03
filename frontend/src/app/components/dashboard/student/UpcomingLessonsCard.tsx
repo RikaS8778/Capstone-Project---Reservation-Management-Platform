@@ -6,7 +6,7 @@ export default async function UpcomingLessonsCard({ studentId }: { studentId: st
   const hasLessons = lessons && lessons.length > 0
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white shadow-sm rounded-xl p-6">
+    <div className="w-full bg-white shadow-sm rounded-xl p-6">
       <div className="flex items-center space-x-2 mb-4">
         <CalendarIcon className="w-5 h-5 text-pink-500" />
         <h2 className="text-lg font-semibold text-gray-800">Upcoming Lessons</h2>

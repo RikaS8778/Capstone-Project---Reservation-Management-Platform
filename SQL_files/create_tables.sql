@@ -61,6 +61,7 @@ CREATE TABLE availabilities (
 CREATE TABLE ticket_types (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tutor_id uuid NOT NULL REFERENCES users(id),
+  tutor_settings_id UUID NOT NULL REFERENCES tutor_settings(id),
   name text NOT NULL,
   type integer NOT NULL,
   quantities integer NOT NULL DEFAULT 1,

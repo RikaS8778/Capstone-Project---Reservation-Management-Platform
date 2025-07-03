@@ -11,7 +11,14 @@ export async function getUserInfo() {
 
   const { data: userInfo, error } = await supabase
     .from('users')
-    .select('first_name, last_name, role')
+    .select(`
+        first_name,
+        last_name,
+        role,
+        tutor_settings (
+        public_id
+        )
+    `)
     .eq('id', user.id)
     .maybeSingle()
 

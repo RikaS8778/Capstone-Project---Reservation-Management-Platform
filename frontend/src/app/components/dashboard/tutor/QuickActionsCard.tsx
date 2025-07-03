@@ -11,7 +11,9 @@ type Props = {
 export default function QuickActionsCard({ publicId }: Props) {
   const [copied, setCopied] = useState(false)
 
-  const inviteLink = `${process.env.NEXT_PUBLIC_SITE_URL}/signup/student/${publicId}`
+  console.log('publicId', publicId)
+
+  const inviteLink = `${process.env.NEXT_PUBLIC_SITE_URL}/student/signup?public_id=${publicId}`
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(inviteLink)
