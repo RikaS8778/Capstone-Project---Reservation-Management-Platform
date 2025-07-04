@@ -2,6 +2,7 @@
 
 import AuthForm from '@/app/components/AuthForm'
 import GoogleSignupButton from '@/app/components/GoogleSignupBottun'
+import Spinner from '@/app/components/Spinner'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -30,7 +31,7 @@ export default function TutorSignupPage() {
   }, [token])
 
   if (isTokenValid === null) {
-    return <div className="text-center mt-4">Checking token...</div>
+    return <Spinner message={'Checking token...'} />
   }
 
   if (isTokenValid === false) {

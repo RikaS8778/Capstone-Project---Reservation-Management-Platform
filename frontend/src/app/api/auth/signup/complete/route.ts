@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import { updateUserProfile, insertTutorSetting } from '../shared'
+import { getUserInfo } from '@/utils/data/data'
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
   const public_id = formData.get('publicId')?.toString() || ''
   const booking_deadline = parseInt(formData.get('bookingDeadline') as string) || 0
   const booking_unit = parseInt(formData.get('bookingUnit') as string) || 15
-  const currency = formData.get('currency')?.toString() || 'JPY' //or 'CAD'
+  const currency = formData.get('currency')?.toString() || 'CAD' //or 'CAD'
   const message = formData.get('discription')?.toString() || ''
   const file = formData.get('file') as File | null
 
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+
     await updateUserProfile(supabase, {
       id: user.id,
       first_name,
@@ -57,20 +59,24 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     return NextResponse.json({ error: `Profile update failed: ${error.message}` }, { status: 400 });
   }
-
-  try {
-    await insertTutorSetting(supabase, {
-      tutor_id: user.id,
-      public_id,
-      booking_deadline,
-      booking_unit,
-      currency,
-      message,
-      picture_path,
-    });
-  } catch (error: any) {
-    return NextResponse.json({ error: `Tutor settings registration failed: ${error.message}` }, { status: 400 });
+  const { userInfo } = await getUserInfo()
+  
+  if (userInfo && userInfo?.role === 1) {
+    try {
+        await insertTutorSetting(supabase, {
+          tutor_id: user.id,
+          public_id,
+          booking_deadline,
+          booking_unit,
+          currency,
+          message,
+          picture_path,
+        });
+      } catch (error: any) {
+        return NextResponse.json({ error: `Tutor settings registration failed: ${error.message}` }, { status: 400 });
+      }
   }
+  
 
   return NextResponse.json({ success: true }, { status: 200 });
 }

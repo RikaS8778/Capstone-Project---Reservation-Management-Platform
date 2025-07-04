@@ -139,3 +139,29 @@ export async function getThisMonthRevenue(tutorId: string) {
 
   return { total, currency, stripe_account_id }
 }
+
+///////
+
+export async function getTicketTypes() {
+  const supabase = await createClient()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  if (userError || !userData?.user?.id) {
+    console.error('Failed to get authenticated user:', userError?.message)
+    return []
+  }
+  const userId = userData.user.id
+
+  const { data, error } = await supabase
+    .from('ticket_types')
+    .select('id, name, price, visibility, created_at, type, quantities, lesson_duration')
+    .eq('tutor_id', userId)
+    .eq('is_deleted', false) 
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Failed to fetch ticket types:', error)
+    return []
+  }
+
+  return data
+}
